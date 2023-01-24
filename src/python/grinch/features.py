@@ -126,6 +126,17 @@ class HashingVectorizerFeatures(object):
     def encode(self, things_to_encode):
         return self.model.transform([self.get_field(x) for x in things_to_encode])
 
+class LocationVectorizerFeatures(object):
+    """Features for hashing vectorizer."""
+
+    def __init__(self, name, get_field, norm=None):
+        self.name = name
+        self.get_field = get_field
+        from sklearn.feature_extraction.text import HashingVectorizer
+        self.model = HashingVectorizer(analyzer=lambda x: [xx for xx in x], alternate_sign=False, dtype=np.float32, norm=norm, binary=True)
+
+    def encode(self, things_to_encode):
+        return self.model.transform([self.get_field(x) for x in things_to_encode])
 
 class SingleItemHashingVectorizerFeatures(object):
     """Features for hashing vectorizer where each feature is a single integer."""
